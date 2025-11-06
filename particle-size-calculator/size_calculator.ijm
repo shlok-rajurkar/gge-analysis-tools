@@ -1,4 +1,5 @@
 //GGE particle size macro for ImageJ to replace GGE7A3 on NIHImage.
+imageID = getImageID();
 
 main();
 
@@ -14,12 +15,14 @@ var z = 0;
 var t = 0;
 var cubicCoeffArray;
 var quarticCoeffArray;
-var croppedGelWindow;
+var imageID;
 var originXVal;
 var laneLength;
 var xValsCurrLaneIndex;
 var yValsCurrLane;
 var bins;
+
+
 
 // Main macro flow
 function main() {
@@ -49,7 +52,7 @@ function initialize() {
     imageWidth = 0;
     imageHeight = 0;
     xnum = getTitle();
-    croppedGelWindow = getTitle();
+
     run('Set Measurements...', 'invert redirect=None decimal=3');
     run('Gel Analyzer Options...', 'vertical=1 horizontal=1 label');
     run('Clear Results');
@@ -98,7 +101,7 @@ function getStandards() {
 
 function setStandard() {
     //print('setStandards');
-    selectWindow(croppedGelWindow);
+    selectImage(imageID);
     numberOfStandards = getNumber('enter number of standards', 4);
     stdWeightsTemp = newArray(numberOfStandards);
     for(i = 0; i < numberOfStandards; i++){
@@ -108,7 +111,7 @@ function setStandard() {
 
     setTool('Rectangle');
 
-    selectWindow(croppedGelWindow);
+    selectImage(imageID);
     getDimensions(standardLaneWidth, standardLaneHeight, c, z, t);
 
     makeRectangle(0, (standardLaneHeight/2)-10 , standardLaneWidth, 20);
@@ -197,7 +200,7 @@ function quantifyLane() {
         exit('Standards not set.');
     }
 
-    selectWindow(croppedGelWindow);
+    selectImage(imageID);
 
     waitForUser('Drag rectangle to sample lane and press OK.');
 
